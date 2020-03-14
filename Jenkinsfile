@@ -112,12 +112,13 @@ pipeline {
                 steps {
                     sh './gradlew javadoc'
 
+                    sh './gradlew copyJavaDoc'
                 }
                 post {
                     always {
-                    sh './gradlew copyJavaDoc'
+
                                         step([$class: 'JavadocArchiver',
-                                            javadocDir: '/build/docs/javadoc/',
+                                            javadocDir: '**/build/docs/javadoc/',
                                             keepAll: 'true'
                                             ])
                     }
