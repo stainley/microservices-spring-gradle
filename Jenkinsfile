@@ -35,6 +35,7 @@ pipeline {
             parallel {
                 stage('Compile') {
                     steps {
+                        sh 'chmod +x ./gradlew'
                         sh './gradlew compileJava'
                     }
                 }
@@ -42,6 +43,7 @@ pipeline {
                 stage('CheckStyle') {
                     steps {
                         //sh 'mvn checkstyle:checkstyle'
+                        sh 'chmod +x ./gradlew'
                         sh './gradlew clean checkstyleMain'
                         step([$class: 'CheckStylePublisher',
                         //canRunOnFailed: true,
