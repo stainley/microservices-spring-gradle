@@ -117,10 +117,10 @@ pipeline {
                 post {
                     always {
 
-                                        step([$class: 'JavadocArchiver',
-                                            javadocDir: '**/build/docs/javadoc/',
-                                            keepAll: 'true'
-                                            ])
+                        step([$class: 'JavadocArchiver',
+                            javadocDir: '**/build/docs/javadoc/*',
+                            keepAll: 'true'
+                            ])
                     }
 
                 }
