@@ -113,12 +113,15 @@ pipeline {
                     sh './gradlew javadoc'
 
                 }
-                steps {
+                post {
+                    always {
                     sh './gradlew copyJavaDoc'
-                    step([$class: 'JavadocArchiver',
-                        javadocDir: '/build/docs/javadoc/',
-                        keepAll: 'true'
-                        ])
+                                        step([$class: 'JavadocArchiver',
+                                            javadocDir: '/build/docs/javadoc/',
+                                            keepAll: 'true'
+                                            ])
+                    }
+
                 }
             }
             stage('SonarQube') {
