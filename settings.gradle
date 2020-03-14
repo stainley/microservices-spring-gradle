@@ -1,0 +1,5 @@
+rootProject.name = 'microservices'
+
+include 'root:product-services'
+include 'api'
+

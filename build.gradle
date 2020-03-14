@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+}
+
+def exportedProjects = [
+        ':root:product-services', ':api'
+]
+
+allprojects {
+    sourceCompatibility = 1.8
+
+    task alljavadoc(type: Javadoc) {
+        group 'Documentation'
+        description 'Generates aggregated Javadoc API documentation for the main source code of all projects.'
+
+        doFirst {
+            subprojects.each {
+                project -> project.sourceSets.main.output.each {
+                    dir -> dir.mkdirs()
+                }
+            }
+
+            source subprojects.collect{ project ->
+                project.sourceSets.main.allJava
+            }
+
+            classpath = files(subprojects.collect { project ->
+                project.sourceSets.main.compileClasspath
+            })
+
+            options.addStringOption('sourceclasspath', files(subprojects.collect { project ->
+                project.sourceSets.main.output
+            }).getAsPath())
+
+            destinationDir file("$project.buildDir/docs/javadoc/")
+            println(destinationDir)
+        }
+        /*source exportedProjects.collect {
+            project(it).sourceSets.main.allJava
+        }
+        classpath = files(exportedProjects.collect { project(it).sourceSets.main.compileClasspath })
+        destinationDir = file("${buildDir}/docs/javadoc")
+        println(destinationDir)*/
+    }
+
+}
+
+subprojects {
+
+}
+
+
+group 'com.salapp.microservices'
+version '1.0.0-SNAPSHOT'
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
