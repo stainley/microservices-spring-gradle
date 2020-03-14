@@ -118,7 +118,7 @@ pipeline {
                     always {
 
                         step([$class: 'JavadocArchiver',
-                            javadocDir: '**/build/docs/javadoc/*',
+                            javadocDir: 'build/docs/javadoc',
                             keepAll: 'true'
                             ])
                     }
