@@ -110,7 +110,8 @@ pipeline {
             }
             stage('JavaDoc') {
                 steps {
-                    sh './gradlew alljavadoc'
+                    sh './gradlew javadoc'
+                    sh './gradlew copyJavaDoc'
                     step([
                         $class: 'JavadocArchiver',
                         javadocDir: '/build/docs/javadoc/',

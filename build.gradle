@@ -1,63 +1,93 @@
 plugins {
     id 'java'
-}
-
-def exportedProjects = [
-        ':root:product-services', ':api'
-]
-
-allprojects {
-    sourceCompatibility = 1.8
-
-    task alljavadoc(type: Javadoc) {
-        group 'Documentation'
-        description 'Generates aggregated Javadoc API documentation for the main source code of all projects.'
-
-        doFirst {
-            subprojects.each {
-                project -> project.sourceSets.main.output.each {
-                    dir -> dir.mkdirs()
-                }
-            }
-
-            source subprojects.collect{ project ->
-                project.sourceSets.main.allJava
-            }
-
-            classpath = files(subprojects.collect { project ->
-                project.sourceSets.main.compileClasspath
-            })
-
-            options.addStringOption('sourceclasspath', files(subprojects.collect { project ->
-                project.sourceSets.main.output
-            }).getAsPath())
-
-            destinationDir file("$project.buildDir/docs/javadoc/")
-            println(destinationDir)
-        }
-        /*source exportedProjects.collect {
-            project(it).sourceSets.main.allJava
-        }
-        classpath = files(exportedProjects.collect { project(it).sourceSets.main.compileClasspath })
-        destinationDir = file("${buildDir}/docs/javadoc")
-        println(destinationDir)*/
-    }
-
-}
-
-subprojects {
-
+    id 'jacoco'
+    id "org.sonarqube" version "2.8"
 }
 
 
 group 'com.salapp.microservices'
 version '1.0.0-SNAPSHOT'
 
+apply plugin: 'checkstyle'
+
+
+apply plugin: "org.sonarqube"
+apply plugin: "jacoco"
+
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
 }
+
+sourceCompatibility = 1.8
+
+test {
+    useJUnitPlatform()
+}
+
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8"
+
+}
+
+
+subprojects {
+
+    checkstyle {
+        toolVersion '7.8.1'
+        configFile file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+    }
+
+    checkstyleMain {
+        source = 'src/main/java'
+    }
+
+    checkstyleTest {
+        source = 'src/test/java'
+    }
+
+
+    def exportedProjects = [
+            ':root:product-services', ':api'
+    ]
+
+    task alljavadoc(type: Javadoc) {
+        group 'Documentation'
+
+        source exportedProjects.collect {
+            //project(it).sourceSets.main.allJava
+
+            project.sourceSets.main.allJava
+        }
+        classpath = files(exportedProjects.collect {
+            project(it).sourceSets.main.compileClasspath
+        })
+
+        destinationDir = file("${buildDir}/docs/javadoc")
+    }
+
+
+    task copyJavaDoc(type: Copy) {
+        group 'Documentation'
+
+        from file("${buildDir}/docs/javadoc")
+        into "../build/docs/javadoc"
+    }
+
+    task deleteBuild(type: Delete) {
+        delete '../build/'
+    }
+}
+
+
+allprojects {
+
+
+
+
 }
