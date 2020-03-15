@@ -15,6 +15,7 @@ apply plugin: "org.sonarqube"
 apply plugin: "jacoco"
 
 
+
 repositories {
     mavenCentral()
     maven {
@@ -82,6 +83,8 @@ subprojects {
     task deleteBuild(type: Delete) {
         delete '../build/'
     }
+
+
 }
 
 

@@ -103,9 +103,10 @@ pipeline {
             }
             stage('Findbugs') {
                 steps {
-                    sh ' mvn findbugs:findbugs'
+                    //sh ' mvn findbugs:findbugs'
+                    sh './gradlew findbugsMain findbugsTest'
                     // using findbugs plugin
-                    findbugs pattern: '**/target/findbugsXml.xml'
+                    findbugs pattern: '**/build/findbugs/*'
                 }
             }
             stage('JavaDoc') {
