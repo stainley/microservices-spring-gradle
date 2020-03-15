@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.2.5.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
+	id 'pmd'
 }
 
 apply plugin: 'findbugs'
@@ -58,9 +59,42 @@ findbugs {
 	reportsDir = file("$project.buildDir/reports/findbugs")
 	effort = "max"
 }
+
 tasks.withType(FindBugs) {
 	reports {
 		xml.enabled false
 		html.enabled true
 	}
+}
+
+tasks.withType(Pmd){
+	reports{
+		xml.enabled=true
+		html.enabled=true
+	}
+}
+
+
+pmd {
+	ignoreFailures = true
+	pmdTest.enabled=false
+	ruleSets = [
+			'java-basic',
+			'java-braces',
+			'java-clone',
+			'java-codesize',
+			'java-comments',
+			'java-controversial',
+			'java-coupling',
+			'java-design',
+			'java-empty',
+			'java-finalizers',
+			'java-imports',
+			'java-optimizations',
+			'java-strictexception',
+			'java-strings',
+			'java-typeresolution',
+			'java-unnecessary',
+			'java-unusedcode'
+	]
 }

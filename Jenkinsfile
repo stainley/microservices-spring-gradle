@@ -96,9 +96,9 @@ pipeline {
             stage('PMD') {
 
                 steps {
-                    sh ' mvn pmd:pmd'
+                    sh './gradlew pmdMain pmdTest'
                     // using pmd plugin
-                    step([$class: 'PmdPublisher', pattern: '**/target/pmd.xml'])
+                    step([$class: 'PmdPublisher', pattern: '**/build/reports/main.xml'])
                 }
             }
             stage('Findbugs') {
