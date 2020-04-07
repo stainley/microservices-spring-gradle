@@ -1,5 +1,10 @@
 pipeline {
     agent any
+
+    tools {
+        jdk 'JDK11'
+    }
+
     environment {
         // This can be nexus3 or nexus2
           NEXUS_VERSION = "nexus3"
@@ -25,6 +30,14 @@ pipeline {
     }
 
     stages {
+        stage('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "JAVA_HOME = ${JAVA_HOME}"
+                '''
+            }
+        }
         stage('SCM') {
             steps {
                 checkout scm
