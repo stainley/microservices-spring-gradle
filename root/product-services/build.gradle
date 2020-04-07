@@ -1,100 +1,101 @@
 plugins {
-	id 'org.springframework.boot' version '2.2.5.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-	id 'java'
-	id 'pmd'
+    id 'org.springframework.boot' version '2.2.5.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+    id 'pmd'
 }
 
-apply plugin: 'findbugs'
+/*apply plugin: 'findbugs'*/
 
 
 group = 'com.salapp.microservices.product'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = '11'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation project(':api')
+    implementation project(':api')
+    implementation project(':util')
 
 
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
-	testImplementation 'io.projectreactor:reactor-test'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'io.projectreactor:reactor-test'
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 sourceSets {
-	integrationTest {
-		compileClasspath += sourceSets.main.output + configurations.testCompile
-		runtimeClasspath += output + compileClasspath + configurations.testRuntime
-	}
+    integrationTest {
+        compileClasspath += sourceSets.main.output + configurations.testCompile
+        runtimeClasspath += output + compileClasspath + configurations.testRuntime
+    }
 }
 
 task integrationTest(type: Test) {
-	description = 'Runs the integration tests.'
-	group = 'verification'
-	testClassesDirs = sourceSets.integrationTest.output.classesDirs
-	classpath = sourceSets.integrationTest.runtimeClasspath
-	outputs.upToDateWhen { false }
-	mustRunAfter test
+    description = 'Runs the integration tests.'
+    group = 'verification'
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    outputs.upToDateWhen { false }
+    mustRunAfter test
 }
 
 check.dependsOn integrationTest
 
 
-findbugs {
-	ignoreFailures = false
-	toolVersion = "3.0.1"
-	sourceSets=[sourceSets.main]
-	excludeFilter = file("../../config/findbugs/excludeFilter.xml")
-	reportsDir = file("$project.buildDir/reports/findbugs")
-	effort = "max"
-}
+/*findbugs {
+    ignoreFailures = false
+    toolVersion = "3.0.1"
+    sourceSets = [sourceSets.main]
+    excludeFilter = file("../../config/findbugs/excludeFilter.xml")
+    reportsDir = file("$project.buildDir/reports/findbugs")
+    effort = "max"
+}*/
 
 tasks.withType(FindBugs) {
-	reports {
-		xml.enabled false
-		html.enabled true
-	}
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
 }
 
-tasks.withType(Pmd){
-	reports{
-		xml.enabled=true
-		html.enabled=true
-	}
+tasks.withType(Pmd) {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
 }
 
 
 pmd {
-	ignoreFailures = true
-	pmdTest.enabled=false
-	ruleSets = [
-			'java-basic',
-			'java-braces',
-			'java-clone',
-			'java-codesize',
-			'java-comments',
-			'java-controversial',
-			'java-coupling',
-			'java-design',
-			'java-empty',
-			'java-finalizers',
-			'java-imports',
-			'java-optimizations',
-			'java-strictexception',
-			'java-strings',
-			'java-typeresolution',
-			'java-unnecessary',
-			'java-unusedcode'
-	]
+    ignoreFailures = true
+    pmdTest.enabled = false
+    ruleSets = [
+            'java-basic',
+            'java-braces',
+            'java-clone',
+            'java-codesize',
+            'java-comments',
+            'java-controversial',
+            'java-coupling',
+            'java-design',
+            'java-empty',
+            'java-finalizers',
+            'java-imports',
+            'java-optimizations',
+            'java-strictexception',
+            'java-strings',
+            'java-typeresolution',
+            'java-unnecessary',
+            'java-unusedcode'
+    ]
 }

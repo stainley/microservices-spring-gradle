@@ -11,8 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan("com.salapp.microservices")
 public class ProductServicesApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ProductServicesApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ProductServicesApplication.class, args);
+    }
 
 }

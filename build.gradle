@@ -23,7 +23,7 @@ repositories {
     }
 }
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 
 test {
     useJUnitPlatform()
@@ -89,8 +89,6 @@ subprojects {
 
 
 allprojects {
-
-
 
 
 }

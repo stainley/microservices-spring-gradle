@@ -1,5 +1,14 @@
 rootProject.name = 'microservices'
 
-include 'root:product-services'
 include 'api'
+include 'util'
+
+include 'root:product-services'
+include 'root:recommendation-services'
+include 'root:review-services'
+include 'root:product-composite-services'
+
+
+
+
 
