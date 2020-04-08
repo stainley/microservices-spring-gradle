@@ -65,7 +65,6 @@ public class ProductCompositeIntegration implements ProductService, ReviewServic
 
         return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Recommendation>>() {
         }).getBody();
-
-
     }
+
 }

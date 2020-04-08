@@ -1,6 +1,13 @@
 server:
-  port: 7001
+  port: 8080
+
 logging:
   level:
     root: info
     com.salapp.microservices:  debug
+
+---
+spring:
+  profiles: docker
+server:
+  port: 8080
