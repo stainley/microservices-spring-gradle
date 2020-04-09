@@ -8,13 +8,24 @@ group = 'com.salapp.microservices.product.composite.services'
 version = '1.0.0-SNAPSHOT'
 sourceCompatibility = '11'
 
+ext {
+    springfoxVersion = "3.0.0-20190808.104142"
+}
+
 repositories {
     mavenCentral()
+    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+
 }
 
 dependencies {
     implementation project(':api')
     implementation project(':util')
+
+    implementation("io.springfox:springfox-swagger2:${springfoxVersion}-39")
+    implementation("io.springfox:springfox-swagger-ui:${springfoxVersion}-39")
+    implementation("io.springfox:springfox-swagger-common:${springfoxVersion}-39")
+    implementation("io.springfox:springfox-spring-webflux:${springfoxVersion}-31")
 
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
