@@ -1,4 +1,4 @@
-package com.salapp.microservices.api.core.product;
+package com.salapp.microservices.api.composite.product;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

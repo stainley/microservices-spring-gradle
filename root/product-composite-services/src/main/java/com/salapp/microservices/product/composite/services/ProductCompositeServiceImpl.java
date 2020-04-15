@@ -1,5 +1,6 @@
 package com.salapp.microservices.product.composite.services;
 
+import com.salapp.microservices.api.composite.product.*;
 import com.salapp.microservices.api.core.product.*;
 import com.salapp.microservices.api.core.recommendation.Recommendation;
 import com.salapp.microservices.api.core.review.Review;

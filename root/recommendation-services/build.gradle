@@ -23,6 +23,9 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation 'io.projectreactor:reactor-test'
+
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb:2.1.3.RELEASE")
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.2.0")
 }
 
 test {

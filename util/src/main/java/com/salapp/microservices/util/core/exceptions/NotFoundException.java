@@ -4,7 +4,7 @@ package com.salapp.microservices.util.core.exceptions;
  * @author Stainley Lebron
  * @since 4/7/20.
  */
-public class NotFoundException extends RuntimeException{
+public class NotFoundException extends RuntimeException {
 
     public NotFoundException(){
 
