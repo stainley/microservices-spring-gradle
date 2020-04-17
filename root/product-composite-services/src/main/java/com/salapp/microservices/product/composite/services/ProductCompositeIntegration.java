@@ -53,10 +53,35 @@ public class ProductCompositeIntegration implements ProductService, ReviewServic
     }
 
     @Override
+    public Product createProduct(Product body) {
+        return null;
+    }
+
+    @Override
+    public void deleteProduct(int productId) {
+
+    }
+
+    @Override
     public List<Review> getReviews(int productId) {
         String url = reviewServiceUrl + productId;
         return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Review>>() {
         }).getBody();
+    }
+
+    @Override
+    public Review createReview(Review body) {
+        return null;
+    }
+
+    @Override
+    public void deleteReviews(int productId) {
+
+    }
+
+    @Override
+    public Recommendation createRecommendation(Recommendation body) {
+        return null;
     }
 
     @Override
@@ -65,6 +90,11 @@ public class ProductCompositeIntegration implements ProductService, ReviewServic
 
         return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Recommendation>>() {
         }).getBody();
+    }
+
+    @Override
+    public void deleteRecommendation(int productId) {
+
     }
 
 }

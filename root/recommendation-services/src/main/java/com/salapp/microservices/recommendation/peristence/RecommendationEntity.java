@@ -25,6 +25,17 @@ public class RecommendationEntity {
     private int rating;
     private String content;
 
+    public RecommendationEntity() {
+    }
+
+    public RecommendationEntity(int productId, int recommendationId, String author, int rating, String content) {
+        this.productId = productId;
+        this.recommendationId = recommendationId;
+        this.author = author;
+        this.rating = rating;
+        this.content = content;
+    }
+
     public String getId() {
         return id;
     }
@@ -51,5 +62,33 @@ public class RecommendationEntity {
 
     public String getContent() {
         return content;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public void setRecommendationId(int recommendationId) {
+        this.recommendationId = recommendationId;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

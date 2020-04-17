@@ -2,11 +2,14 @@ package com.salapp.microservices.recommendation.services;
 
 import com.salapp.microservices.api.core.recommendation.Recommendation;
 import com.salapp.microservices.api.core.recommendation.RecommendationService;
+import com.salapp.microservices.recommendation.peristence.RecommendationEntity;
+import com.salapp.microservices.recommendation.peristence.RecommendationRepository;
 import com.salapp.microservices.util.core.exceptions.InvalidInputException;
 import com.salapp.microservices.util.core.http.ServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -22,9 +25,29 @@ public class RecommendationServiceIml implements RecommendationService {
 
     private final ServiceUtil serviceUtil;
 
+    private final RecommendationRepository repository;
+
+    private final RecommendationMapper mapper;
+
     @Autowired
-    public RecommendationServiceIml(ServiceUtil serviceUtil) {
+    public RecommendationServiceIml(RecommendationRepository repository, RecommendationMapper mapper, ServiceUtil serviceUtil) {
+        this.repository = repository;
+        this.mapper = mapper;
         this.serviceUtil = serviceUtil;
+    }
+
+    @Override
+    public Recommendation createRecommendation(Recommendation body) {
+        try {
+            RecommendationEntity entity = mapper.apiToEntity(body);
+            RecommendationEntity newEntity = repository.save(entity);
+
+            LOG.debug("createRecommendation: created a recommendation entity: {}/{}", body.getProductId(), body.getRecommendationId());
+            return mapper.entityToApi(newEntity);
+        } catch (DuplicateKeyException dke) {
+            throw new InvalidInputException("Duplicate key, Product Id: " + body.getProductId() + ", Recommendation Id: " + body.getRecommendationId());
+        }
+
     }
 
     @Override
@@ -44,5 +67,11 @@ public class RecommendationServiceIml implements RecommendationService {
 
         LOG.debug("/recommendation response size: {}", list.size());
         return list;
+    }
+
+    @Override
+    public void deleteRecommendation(int productId) {
+        LOG.debug("deleteRecommendations: tried to delete recommendations for the product with productId: {}", productId);
+        repository.deleteAll(repository.findByProductId(productId));
     }
 }
