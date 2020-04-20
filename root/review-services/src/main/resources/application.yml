@@ -1,12 +1,33 @@
 server:
   port: 7003
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    url: jdbc:mysql://localhost/review-db
+    username: user
+    password: pwd
+    hikari:
+      initialization-fail-timeout: 60000
+
 logging:
   level:
     root: info
     com.salapp: debug
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
 
 ---
 spring:
   profiles: docker
+  datasource:
+    url: jdbc:mysql://mysql/review-db
+
 server:
   port: 8080
+
+

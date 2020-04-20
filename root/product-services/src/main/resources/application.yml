@@ -10,12 +10,14 @@ logging:
   level:
     root: info
     com.salapp.microservices:  debug
+    org.springframework.data.mongodb.core.MongoTemplate: debug
 
 ---
 spring:
   profiles: docker
-
-spring.data.mongodb.host: mongodb
+  data:
+    mongodb:
+      host: mongodb
 
 server:
   port: 8080
