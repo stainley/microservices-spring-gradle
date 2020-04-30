@@ -1,14 +1,13 @@
 package com.salapp.microservices.recommendation.peristence;
 
-import org.springframework.data.repository.CrudRepository;
-
-import java.util.List;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
 
 /**
  * @author Stainley Lebron
  * @since 4/11/20.
  */
-public interface RecommendationRepository extends CrudRepository<RecommendationEntity, String> {
+public interface RecommendationRepository extends ReactiveCrudRepository<RecommendationEntity, String> {
 
-    List<RecommendationEntity> findByProductId(int productId);
+    Flux<RecommendationEntity> findByProductId(int productId);
 }

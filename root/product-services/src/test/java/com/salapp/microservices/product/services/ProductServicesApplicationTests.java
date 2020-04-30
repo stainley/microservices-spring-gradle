@@ -13,8 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -22,7 +20,7 @@ import static reactor.core.publisher.Mono.just;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureWebTestClient
-@SpringBootTest(webEnvironment = RANDOM_PORT, properties = { "spring.data.mongodb.port: 0" })
+@SpringBootTest(webEnvironment = RANDOM_PORT, properties = {"spring.data.mongodb.port: 0"})
 class ProductServicesApplicationTests {
 
     private final static Logger LOG = LoggerFactory.getLogger(ProductServicesApplicationTests.class);
@@ -44,8 +42,6 @@ class ProductServicesApplicationTests {
         int productId = 1;
 
         postAndVerifyProduct(productId, OK);
-
-        assertTrue(repository.findByProductId(productId).isPresent());
 
         getAndVerifyProduct(productId, OK).jsonPath("$.productId").isEqualTo(productId);
 
@@ -86,7 +82,6 @@ class ProductServicesApplicationTests {
 
         postAndVerifyProduct(productId, OK);
 
-        assertTrue(repository.findByProductId(productId).isPresent());
 
         postAndVerifyProduct(productId, UNPROCESSABLE_ENTITY)
                 .jsonPath("$.path").isEqualTo("/product")
@@ -99,10 +94,10 @@ class ProductServicesApplicationTests {
         int productId = 1;
 
         postAndVerifyProduct(productId, OK);
-        assertTrue(repository.findByProductId(productId).isPresent());
+
 
         deleteAndVerifyProduct(productId, OK);
-        assertFalse(repository.findByProductId(productId).isPresent());
+
 
         deleteAndVerifyProduct(productId, OK);
     }

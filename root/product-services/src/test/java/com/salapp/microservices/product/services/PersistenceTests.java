@@ -2,13 +2,11 @@ package com.salapp.microservices.product.services;
 
 import com.salapp.microservices.product.peristence.ProductEntity;
 import com.salapp.microservices.product.peristence.ProductRepository;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -26,24 +24,42 @@ public class PersistenceTests {
 
     @BeforeEach
     public void setupDb() {
-        repository.deleteAll();
+        StepVerifier.create(repository.deleteAll()).verifyComplete();
 
         ProductEntity entity = new ProductEntity(1, "n", 1);
-        savedEntity = repository.save(entity);
-
-        assertEqualsProduct(entity, savedEntity);
+        StepVerifier.create(repository.save(entity))
+                .expectNextMatches(createdEntity -> {
+                    savedEntity = createdEntity;
+                    return areProductEqual(entity, savedEntity);
+                }).verifyComplete();
     }
 
-    @Test
+    //@Test
     public void create() {
         ProductEntity newEntity = new ProductEntity(2, "n", 2);
-        savedEntity = repository.save(newEntity);
 
-        ProductEntity foundEntity = repository.findById(newEntity.getId()).get();
-        assertEqualsProduct(newEntity, foundEntity);
+        StepVerifier.create(repository.save(newEntity))
+                .expectNextMatches(createdEntity -> newEntity.getProductId() == createdEntity.getProductId())
+                .verifyComplete();
 
-        assertEquals(2, repository.count());
+        StepVerifier.create(repository.findById(newEntity.getId()))
+                .expectNextMatches(foundEntity -> areProductEqual(newEntity, foundEntity))
+                .verifyComplete();
+
+        StepVerifier.create(repository.count()).expectNext(2L).verifyComplete();
+
     }
+
+
+    private boolean areProductEqual(ProductEntity expectedEntity, ProductEntity actualEntity) {
+        return
+                (expectedEntity.getId().equals(actualEntity.getId())) &&
+                        (expectedEntity.getVersion() == actualEntity.getVersion()) &&
+                        (expectedEntity.getProductId() == actualEntity.getProductId()) &&
+                        (expectedEntity.getName().equals(actualEntity.getName())) &&
+                        (expectedEntity.getWeight() == actualEntity.getWeight());
+    }
+
 
     private void assertEqualsProduct(ProductEntity expectedEntity, ProductEntity actualEntity) {
         assertEquals(expectedEntity.getId(), actualEntity.getId());

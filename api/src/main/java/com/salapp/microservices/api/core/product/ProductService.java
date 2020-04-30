@@ -2,6 +2,7 @@ package com.salapp.microservices.api.core.product;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 /**
  * Product services Rest Interface
@@ -14,7 +15,7 @@ public interface ProductService {
      * @return Product
      */
     @GetMapping(value = "/product/{productId}", produces = "application/json")
-    Product getProduct(@PathVariable int productId);
+    Mono<Product> getProduct(@PathVariable int productId);
 
     /**
      * +
