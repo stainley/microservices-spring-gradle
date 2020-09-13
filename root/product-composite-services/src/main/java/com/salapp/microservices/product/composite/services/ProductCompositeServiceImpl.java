@@ -1,14 +1,14 @@
 package com.salapp.microservices.product.composite.services;
 
 import com.salapp.microservices.api.composite.product.*;
-import com.salapp.microservices.api.core.product.*;
+import com.salapp.microservices.api.core.product.Product;
 import com.salapp.microservices.api.core.recommendation.Recommendation;
 import com.salapp.microservices.api.core.review.Review;
-import com.salapp.microservices.util.core.exceptions.NotFoundException;
 import com.salapp.microservices.util.core.http.ServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,20 +33,20 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
     @Override
     public void createCompositeProduct(ProductAggregate body) {
-        try{
+        try {
             LOG.debug("createCompositeProduct: create a new composite entity for productId: {}", body.getProductId());
 
             Product product = new Product(body.getProductId(), body.getName(), body.getWeight(), null);
             integration.createProduct(product);
 
-            if(body.getRecommendations() != null) {
+            if (body.getRecommendations() != null) {
                 body.getRecommendations().forEach(r -> {
                     Recommendation recommendation = new Recommendation(body.getProductId(), r.getRecommendationId(), r.getAuthor(), r.getRate(), r.getContent(), null);
                     integration.createRecommendation(recommendation);
                 });
             }
 
-            if(body.getReviews() != null) {
+            if (body.getReviews() != null) {
                 body.getReviews().forEach(r -> {
                     Review review = new Review(body.getProductId(), r.getReviewId(), r.getAuthor(), r.getSubject(), r.getContent(), null);
                     integration.createReview(review);
@@ -54,14 +54,21 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
             }
 
             LOG.debug("createCompositeProduct: composite entities created for productId: {}", body.getProductId());
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             LOG.warn("createdCompositeProduct failed", e);
         }
     }
 
     @Override
-    public ProductAggregate getCompositeProduct(int productId) {
-        LOG.debug("getCompositeProduct: lookup a product aggregate for productId: {}", productId);
+    public Mono<ProductAggregate> getCompositeProduct(int productId) {
+
+        return Mono.zip(
+                values -> createProductAggregate((Product) values[0], (List<Recommendation>) values[1], (List<Review>) values[2], serviceUtil.getServiceAddress()),
+                integration.getProduct(productId),
+                integration.getRecommendations(productId),
+                integration.getReviews(productId)
+        ).doOnError(ex -> LOG.warn("getCompositeProduct failed: {}", ex.toString())).log();
+        /*LOG.debug("getCompositeProduct: lookup a product aggregate for productId: {}", productId);
 
         Product product = integration.getProduct(productId);
         if(product == null) throw new NotFoundException("No product found for productId: " + productId);
@@ -72,7 +79,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
         LOG.debug("getCompositeProduct: aggregate entity found for productId: {}", productId);
 
-        return createProductAggregate(product, recommendations, reviews, serviceUtil.getServiceAddress());
+        return createProductAggregate(product, recommendations, reviews, serviceUtil.getServiceAddress());*/
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.salapp.microservices.api.core.product;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -10,7 +9,8 @@ import reactor.core.publisher.Mono;
 public interface ProductService {
 
     /**
-     *  Get a product by productId
+     * Get a product by productId
+     *
      * @param productId String
      * @return Product
      */
@@ -20,8 +20,9 @@ public interface ProductService {
     /**
      * +
      * curl -X POST $HOST:$PORT/product \
-     *   -H "Content-Type: application/json" --data \
-     *   '{"productId":123,"name":"product 123","weight":123}'
+     * -H "Content-Type: application/json" --data \
+     * '{"productId":123,"name":"product 123","weight":123}'
+     *
      * @param body
      * @return
      */

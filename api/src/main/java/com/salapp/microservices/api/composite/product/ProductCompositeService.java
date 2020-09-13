@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Stainley Lebron
@@ -43,7 +44,7 @@ public interface ProductCompositeService {
 
     })
     @GetMapping(value = "/product-composite/{productId}")
-    ProductAggregate getCompositeProduct(@PathVariable int productId);
+    Mono<ProductAggregate> getCompositeProduct(@PathVariable int productId);
 
     /**
      * Sample usage:

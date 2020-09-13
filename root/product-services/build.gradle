@@ -69,14 +69,14 @@ task integrationTest(type: Test) {
 check.dependsOn integrationTest
 
 
-/*findbugs {
+findbugs {
     ignoreFailures = false
     toolVersion = "3.0.1"
     sourceSets = [sourceSets.main]
     excludeFilter = file("../../config/findbugs/excludeFilter.xml")
     reportsDir = file("$project.buildDir/reports/findbugs")
     effort = "max"
-}*/
+}
 
 tasks.withType(FindBugs) {
     reports {
