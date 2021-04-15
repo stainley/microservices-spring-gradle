@@ -105,40 +105,7 @@ pipeline {
 
 
     stage('Code Quality Analysis') {
-        parallel {
-            stage('PMD') {
-
-                steps {
-                    sh './gradlew pmdMain pmdTest'
-                    // using pmd plugin
-                    step([$class: 'PmdPublisher', pattern: '**/build/reports/main.xml'])
-                }
-            }
-            stage('Findbugs') {
-                steps {
-                    //sh ' mvn findbugs:findbugs'
-                    sh './gradlew findbugsMain findbugsTest'
-                    // using findbugs plugin
-                    findbugs pattern: '**/build/findbugs/*'
-                }
-            }
-            stage('JavaDoc') {
-                steps {
-                    sh './gradlew javadoc'
-
-                    sh './gradlew copyJavaDoc'
-                }
-                post {
-                    always {
-
-                        step([$class: 'JavadocArchiver',
-                            javadocDir: 'build/docs/javadoc',
-                            keepAll: 'true'
-                            ])
-                    }
-
-                }
-            }
+        parallel {            
             stage('SonarQube') {
                 environment {
                     scannerHome = tool 'SonarQube Scanner'
